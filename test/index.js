@@ -21,7 +21,7 @@ const spec = {
         create: {
             module: (wpool) => wpool['fibonacci'].proxy()
                 .then(function (worker) {
-                    return worker.run(10);
+                    return worker.run(8);
                 })
                 .then(function (result) {
                     wpool['fibonacci'].terminate();
@@ -51,7 +51,7 @@ describe('Worker pool', () => {
     });
 
     it('should calculate fibonacci value', () => {
-        expect(context.poolInvocationResult).to.equal(55);
+        expect(context.poolInvocationResult).to.equal(21);
     });
 });
 
