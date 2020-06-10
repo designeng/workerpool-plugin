@@ -1,4 +1,4 @@
-import workerpoolPlugin from '../index';
+const workerpoolPlugin = require('../index');
 const wire = require('wire');
 const { expect } = require('chai');
 
@@ -15,6 +15,25 @@ const spec = {
                 {name: 'fibonacci', path: __dirname + '/assets/worker.js'}
             ]
         }
+    },
+
+    poolInvocationResult: {
+        create: {
+            module: (wpool) => wpool['fibonacci'].proxy()
+                .then(function (worker) {
+                    return worker.run(10);
+                })
+                .then(function (result) {
+                    wpool['fibonacci'].terminate();
+                    return result;
+                })
+                .catch(function (error) {
+                    console.error('Smth went wrong:', error);
+                }),
+            args: [
+                {$ref: 'wpool'}
+            ]
+        }
     }
 }
 
@@ -29,6 +48,10 @@ before(async () => {
 describe('Worker pool', () => {
     it('should be created', () => {
         expect(context.wpool).to.be.ok;
+    });
+
+    it('should calculate fibonacci value', () => {
+        expect(context.poolInvocationResult).to.equal(55);
     });
 });
 

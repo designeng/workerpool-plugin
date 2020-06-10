@@ -7,5 +7,5 @@ function fibonacci(n) {
 }
 
 workerpool.worker({
-    fibonacci
+    run: fibonacci
 });
